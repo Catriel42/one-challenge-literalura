@@ -16,13 +16,5 @@ public class LiteraluraApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         System.out.println("Hello World from Spring Boot!");
-        Service service = new Service();
-        try {
-            System.out.println(service.get());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
