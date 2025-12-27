@@ -23,8 +23,8 @@ public class GutendexClient {
     }
 
     private <T> T get(String endpoint,
-                      Class<T> responseType,
-                      Map<String, String> queryParams
+                      Map<String, String> queryParams,
+                      Class<T> responseType
     ) throws Exception {
 
         StringBuilder url = new StringBuilder(baseUrl + endpoint);
