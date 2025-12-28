@@ -2,6 +2,7 @@ package com.catodev.literalura.client;
 
 import com.catodev.literalura.dto.GutendexResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Component;
 
 import java.net.URI;
 import java.net.URLEncoder;
@@ -12,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class GutendexClient {
     private final String baseUrl = "https://gutendex.com/";
     private final HttpClient httpClient;
@@ -23,9 +25,8 @@ public class GutendexClient {
     }
 
     private <T> T get(String endpoint,
-                      Map<String, String> queryParams,
-                      Class<T> responseType
-    ) throws Exception {
+            Map<String, String> queryParams,
+            Class<T> responseType) throws Exception {
 
         StringBuilder url = new StringBuilder(baseUrl + endpoint);
 
@@ -42,12 +43,12 @@ public class GutendexClient {
             url.deleteCharAt(url.length() - 1);
         }
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + endpoint))
+                .uri(URI.create(url.toString()))
                 .build();
         HttpResponse<String> response = httpClient.send(
                 request,
-                HttpResponse.BodyHandlers.ofString()
-        );
+                HttpResponse.BodyHandlers.ofString());
+        System.out.println(url);
         if (response.statusCode() != 200) {
             throw new RuntimeException("Error en la API: " + response.statusCode());
         }
@@ -59,7 +60,7 @@ public class GutendexClient {
         params.put("search", query);
         params.put("page", String.valueOf(page));
 
-        return get("/books", params, GutendexResponse.class);
+        return get("books/", params, GutendexResponse.class);
     }
 
 }
