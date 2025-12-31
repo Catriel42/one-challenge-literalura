@@ -16,39 +16,39 @@ public class Menu {
     }
 
     public void showMenu() {
-        System.out.println("\nWelcome to Literalura, please choose an option:");
+        System.out.println("\nBievenido a Literalura");
 		while (true) {
-            System.out.println("\nPlease choose an option:");
-            System.out.println("1. Search books by title and/or author");
-            System.out.println("2. Search books register in db");
-            System.out.println("0. Exit");
-            System.out.print("Your choice: ");
+            System.out.println("\nPor favor selecciona una opción:");
+            System.out.println("1. Buscar libros por título y/o autor");
+            System.out.println("2. Ver los libros registrados en la biblioteca literalura");
+            System.out.println("0. Salir");
+            System.out.print("Tu elección: ");
             String option = scanner.nextLine();
 
             switch (option) {
                 case "1":
-                    System.out.print("Enter the book title: ");
+                    System.out.print("Ingrea el titulo y/o autor: ");
                     String query = scanner.nextLine();
                     try {
                         String result = bookController.getSearchBooks(query, 1);
-                        System.out.println("\nSearch results:");
+                        System.out.println("\nResultados encontrados: :");
                         System.out.println(result);
-                        System.out.println("Libro y autor guardado en la base de datos!");
+                        System.out.println("Libro y autor guardado en la la biblioteca literalura!");
                     } catch (Exception e) {
-                        System.err.println("An error occurred while fetching books: " + e.getMessage());
+                        System.err.println("Ocurrió un error durante la búsqueda: " + e.getMessage());
                     }
                     break;
                 case "2":
-                    System.out.println("All books in library: ");
+                    System.out.println("Todos los libros en la biblioteca literalura: ");
                     String result = bookController.getLibraryBooks();
                     System.out.println(result);
                     break;
                 case "0":
-                    System.out.println("Exiting application.");
+                    System.out.println("Saliendo de la aplicación.");
                     scanner.close();
                     return;
                 default:
-                    System.out.println("Invalid option. Please try again.");
+                    System.out.println("Opción inválida, por favor intenta de nuevo.");
                     break;
             }
         }
