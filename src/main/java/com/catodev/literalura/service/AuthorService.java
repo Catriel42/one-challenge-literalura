@@ -31,4 +31,15 @@ public class AuthorService {
         }
         return sb.toString();
     }
+
+    @Transactional
+    public String getAuthorsByYearAlive(int year){
+        StringBuilder sb = new StringBuilder();
+        List<AuthorEntity> result = authorRepository.findAuthorsAliveInYear(year);
+        List<Author> dtoResult = authorMapper.toDtoList(result);
+        for(Author dto : dtoResult){
+            sb.append(dto.prettyPrint()).append("\n");
+        }
+        return sb.toString();
+    }
 }

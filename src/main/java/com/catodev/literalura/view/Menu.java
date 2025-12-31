@@ -25,6 +25,7 @@ public class Menu {
             System.out.println("1. Buscar libros por título y/o autor");
             System.out.println("2. Ver los libros registrados en la biblioteca literalura");
             System.out.println("3. Ver los autores registrados en la biblioteca literalura");
+            System.out.println("4. Ver los autores vivos en determinado año");
             System.out.println("0. Salir");
             System.out.print("Tu elección: ");
             String option = scanner.nextLine();
@@ -51,6 +52,13 @@ public class Menu {
                     System.out.println("Todos los autores en la biblioteca literalura:");
                     String authorResult = authorController.getAuthors();
                     System.out.println(authorResult);
+                    break;
+                case "4":
+                    System.out.println("Ingresa el año que quieres consultar");
+                    int year = scanner.nextInt();
+                    System.out.println("Todos los autores vivos en determinado año:");
+                    String authorByYearAlive = authorController.getAuthorsByYearAlive(year);
+                    System.out.println(authorByYearAlive);
                     break;
                 case "0":
                     System.out.println("Saliendo de la aplicación.");

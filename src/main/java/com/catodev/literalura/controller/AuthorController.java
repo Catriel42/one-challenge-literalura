@@ -14,4 +14,8 @@ public class AuthorController {
     public String getAuthors() {
         return authorService.getAuthors();
     }
+
+    public String getAuthorsByYearAlive(int year) {
+        return authorService.getAuthorsByYearAlive(year);
+    }
 }
