@@ -13,9 +13,13 @@ public class BookController {
     }
 
     public String getSearchBooks(String query, int page) throws Exception {
-        GutendexResponse response = bookService.getBooks(query, page);
+        GutendexResponse response = bookService.getBooksFromClient(query, page);
         bookService.saveBooksFromResponse(response);
         return response.prettyPrint();
+    }
+
+    public String getLibraryBooks() {
+        return bookService.getBooks();
     }
 
 

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -45,7 +44,18 @@ public class BookService {
         return bookRepository.saveAll(bookEntities);
     }
 
-    public GutendexResponse getBooks(String query, int page) throws Exception {
+    public GutendexResponse getBooksFromClient(String query, int page) throws Exception {
         return client.searchBooks(query, page);
+    }
+
+    @Transactional
+    public String getBooks(){
+        StringBuilder sb = new StringBuilder();
+        List<BookEntity> result =  bookRepository.findAll();
+        List<Book> dtoResult = bookMapper.toDtoList(result);
+        for(Book dto : dtoResult){
+            sb.append(dto.prettyPrint()).append("\n");;
+        }
+        return sb.toString();
     }
 }

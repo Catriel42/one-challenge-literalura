@@ -8,6 +8,8 @@ import com.catodev.literalura.repository.AuthorRepository;
 import com.catodev.literalura.repository.BookRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import java.util.Collections;
+import java.util.List;
 
 @AllArgsConstructor
 @Component
@@ -45,5 +47,44 @@ public class BookMapper {
             entity.setAuthor(authorEntity);
         }
         return entity;
+    }
+
+    //Maps book entity to its corresponding DTO
+    public Book toDto(BookEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        List<Author> authors = Collections.emptyList();
+
+        // Mapear el autor si existe
+        if (entity.getAuthor() != null) {
+            AuthorEntity authorEntity = entity.getAuthor();
+            Author authorDto = new Author(
+                    authorEntity.getName(),
+                    authorEntity.getBirthYear(),
+                    authorEntity.getDeathYear()
+            );
+            authors = List.of(authorDto);
+        }
+
+        return new Book(
+                entity.getTitle(),
+                authors,
+                entity.getLanguages(),
+                entity.isCopyright(),
+                entity.getDownloadCount()
+        );
+    }
+
+    //Maps a list of book entities to a list of DTOs
+    public List<Book> toDtoList(List<BookEntity> entities) {
+        if (entities == null) {
+            return Collections.emptyList();
+        }
+
+        return entities.stream()
+                .map(this::toDto)
+                .toList();
     }
 }
