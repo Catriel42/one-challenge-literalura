@@ -83,6 +83,10 @@ A PlantUML class diagram (`literalura.puml`) is included in the project root to 
 
 ![Class Diagram](/src/main/resources/literalurav2.png)
 
+## Demo!
+
+https://github.com/user-attachments/assets/0f9ae683-f17e-49cd-bba3-11ea7003cb47
+
 ## 📝 License
 
 This project is part of the Alura / Oracle Next Education education program.
