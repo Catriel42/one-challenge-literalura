@@ -54,7 +54,7 @@ public class BookService {
         List<BookEntity> result =  bookRepository.findAll();
         List<Book> dtoResult = bookMapper.toDtoList(result);
         for(Book dto : dtoResult){
-            sb.append(dto.prettyPrint()).append("\n");;
+            sb.append(dto.prettyPrint()).append("\n");
         }
         return sb.toString();
     }
