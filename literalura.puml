@@ -1,0 +1,207 @@
+@startuml
+title Class Diagram - Literalura
+skinparam classAttributeIconSize 0
+skinparam backgroundColor white
+skinparam classBackgroundColor #FEFECE
+skinparam classBorderColor #000000
+skinparam arrowColor #000000
+
+package "com.catodev.literalura" {
+    class LiteraluraApplication {
+        -menu: Menu
+        +LiteraluraApplication(menu: Menu)
+        +main(args: String[])
+        +run(args: String[])
+    }
+
+    package "view" {
+        class Menu {
+            -bookController: BookController
+            -authorController: AuthorController
+            -scanner: Scanner
+            +Menu(bookController: BookController, authorController: AuthorController)
+            +showMenu()
+        }
+    }
+
+    package "controller" {
+        class BookController {
+            -bookService: BookService
+            +BookController(bookService: BookService)
+            +getSearchBooks(query: String, page: int): String
+            +getLibraryBooks(): String
+            +getBooksByLanguage(language: String): String
+        }
+        class AuthorController {
+            -authorService: AuthorService
+            +AuthorController(authorService: AuthorService)
+            +getAuthors(): String
+            +getAuthorsByYearAlive(year: int): String
+        }
+    }
+
+    package "service" {
+        class BookService {
+            -client: GutendexClient
+            -bookRepository: BookRepository
+            -bookMapper: BookMapper
+            +BookService(client: GutendexClient, bookRepository: BookRepository, bookMapper: BookMapper)
+            +saveBooksFromResponse(response: GutendexResponse): List<BookEntity>
+            +getBooksFromClient(query: String, page: int): GutendexResponse
+            +getBooks(): String
+            +getBooksByLanguage(language: String): String
+        }
+        class AuthorService {
+            -authorRepository: AuthorRepository
+            -authorMapper: AuthorMapper
+            +AuthorService(authorRepository: AuthorRepository)
+            +getAuthors(): String
+            +getAuthorsByYearAlive(year: int): String
+        }
+    }
+
+    package "repository" {
+        interface BookRepository {
+            +findByTitle(title: String): Optional<BookEntity>
+            +findByLanguageContaining(language: String): List<BookEntity>
+        }
+        interface AuthorRepository {
+            +findByName(name: String): Optional<AuthorEntity>
+            +findAuthorsAliveInYear(year: Integer): List<AuthorEntity>
+        }
+    }
+
+    package "model" {
+        class BookEntity {
+            -id: Long
+            -title: String
+            -author: AuthorEntity
+            -language: String
+            -copyright: boolean
+            -downloadCount: int
+            +getId(): Long
+            +getTitle(): String
+            +getAuthor(): AuthorEntity
+            +getLanguage(): String
+            +isCopyright(): boolean
+            +getDownloadCount(): int
+            +setId(id: Long)
+            +setTitle(title: String)
+            +setAuthor(author: AuthorEntity)
+            +setLanguage(language: String)
+            +setCopyright(copyright: boolean)
+            +setDownloadCount(downloadCount: int)
+        }
+        class AuthorEntity {
+            -id: Long
+            -name: String
+            -birthYear: Integer
+            -deathYear: Integer
+            -books: List<BookEntity>
+            +getId(): Long
+            +getName(): String
+            +getBirthYear(): Integer
+            +getDeathYear(): Integer
+            +getBooks(): List<BookEntity>
+            +setId(id: Long)
+            +setName(name: String)
+            +setBirthYear(birthYear: Integer)
+            +setDeathYear(deathYear: Integer)
+            +setBooks(books: List<BookEntity>)
+        }
+    }
+
+    package "client" {
+        class GutendexClient {
+            -baseUrl: String
+            -httpClient: HttpClient
+            -objectMapper: ObjectMapper
+            +GutendexClient()
+            -get(endpoint: String, queryParams: Map<String, String>, responseType: Class<T>): T
+            +searchBooks(query: String, page: int): GutendexResponse
+        }
+    }
+
+    package "mapper" {
+        class BookMapper {
+            -authorRepository: AuthorRepository
+            -authorMapper: AuthorMapper
+            +BookMapper(authorRepository: AuthorRepository, authorMapper: AuthorMapper)
+            +toEntity(dto: Book): BookEntity
+            +toDto(entity: BookEntity): Book
+            +toDtoList(entities: List<BookEntity>): List<Book>
+        }
+        class AuthorMapper {
+            +toEntity(dto: Author): AuthorEntity
+            +toDto(entity: AuthorEntity): Author
+            +toDtoList(entities: List<AuthorEntity>): List<Author>
+        }
+    }
+
+    package "dto" {
+        class Book <<record>> {
+            -title: String
+            -authors: List<Author>
+            -languages: List<String>
+            -copyright: boolean
+            -downloadCount: int
+            +prettyPrint(): String
+        }
+        class Author <<record>> {
+            -name: String
+            -birth_year: int
+            -death_year: int
+            +prettyPrint(): String
+        }
+        class GutendexResponse <<record>> {
+            -count: int
+            -next: String
+            -previous: String
+            -results: List<Book>
+            +prettyPrint(): String
+        }
+    }
+
+    package "util" {
+        enum Languages {
+            EN
+            ES
+            FR
+            IT
+            JA
+            KO
+            KW
+            +contains(code: String): boolean
+        }
+    }
+}
+
+LiteraluraApplication ..> Menu : uses
+Menu --> BookController
+Menu --> AuthorController
+BookController --> BookService
+AuthorController --> AuthorService
+BookService --> GutendexClient
+BookService --> BookRepository
+BookService --> BookMapper
+AuthorService --> AuthorRepository
+AuthorService --> AuthorMapper
+BookMapper --> AuthorRepository
+BookMapper --> AuthorMapper
+BookRepository --|> JpaRepository
+AuthorRepository --|> JpaRepository
+BookEntity "0..*" -- "1" AuthorEntity : author
+AuthorEntity "1" -- "0..*" BookEntity : books
+GutendexClient ..> GutendexResponse : returns
+GutendexResponse "1" *-- "0..*" Book : contains
+Book "0..*" *-- "0..*" Author : contains
+BookService ..> GutendexResponse : uses
+BookService ..> BookEntity : uses
+AuthorService ..> AuthorEntity : uses
+BookMapper ..> Book : uses
+BookMapper ..> BookEntity : uses
+AuthorMapper ..> Author : uses
+AuthorMapper ..> AuthorEntity : uses
+Menu ..> Languages : uses
+
+@enduml
