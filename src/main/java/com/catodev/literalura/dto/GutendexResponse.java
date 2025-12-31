@@ -11,7 +11,6 @@ public record GutendexResponse(
 ) {
     public String prettyPrint() {
         StringBuilder sb = new StringBuilder();
-
         sb.append("Total books found: ").append(count).append("\n\n");
 
         for (Book book : results) {

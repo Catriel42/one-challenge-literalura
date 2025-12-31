@@ -7,7 +7,6 @@ import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record Book(
-        int id,
         String title,
         List<Author> authors,
         List<String> languages,
@@ -17,10 +16,11 @@ public record Book(
     public String prettyPrint() {
         return """
                Title: %s
+               Author: %s
                Languages: %s
                Downloads: %d
                -------------------------
-               """.formatted(title, languages, downloadCount);
+               """.formatted(title, authors.getFirst().prettyPrint(), languages, downloadCount);
     }
 }
 
