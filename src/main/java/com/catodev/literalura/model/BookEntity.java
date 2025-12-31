@@ -18,17 +18,15 @@ public class BookEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String title;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "author_id", nullable = false)
+    @JoinColumn(name = "author_id", nullable = true)
     private AuthorEntity author;
 
-    @ElementCollection
-    @CollectionTable(name = "book_languages", joinColumns = @JoinColumn(name = "book_id"))
     @Column(name = "language")
-    private List<String> languages;
+    private String language;
 
     private boolean copyright;
 

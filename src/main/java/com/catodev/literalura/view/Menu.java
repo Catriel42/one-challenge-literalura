@@ -3,6 +3,7 @@ package com.catodev.literalura.view;
 import com.catodev.literalura.controller.AuthorController;
 import com.catodev.literalura.controller.BookController;
 import com.catodev.literalura.service.BookService;
+import com.catodev.literalura.util.Languages;
 import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
@@ -26,6 +27,7 @@ public class Menu {
             System.out.println("2. Ver los libros registrados en la biblioteca literalura");
             System.out.println("3. Ver los autores registrados en la biblioteca literalura");
             System.out.println("4. Ver los autores vivos en determinado año");
+            System.out.println("5. Ver libros por lenguaje");
             System.out.println("0. Salir");
             System.out.print("Tu elección: ");
             String option = scanner.nextLine();
@@ -59,6 +61,20 @@ public class Menu {
                     System.out.println("Todos los autores vivos en determinado año:");
                     String authorByYearAlive = authorController.getAuthorsByYearAlive(year);
                     System.out.println(authorByYearAlive);
+                    break;
+                case "5":
+                    boolean flag = true;
+                    while (flag) {
+                        System.out.println("Ingresa el lenguaje a consultar, (ejem. en, es, fr)");
+                        String language = scanner.nextLine().trim();
+                        if (!Languages.contains(language.toUpperCase())) {
+                            System.out.println("Código de idioma inválido. Intenta de nuevo.");
+                        } else {
+                            String bookByLanguage = bookController.getBooksByLanguage(language);
+                            System.out.println(bookByLanguage);
+                            flag = false;
+                        }
+                    }
                     break;
                 case "0":
                     System.out.println("Saliendo de la aplicación.");

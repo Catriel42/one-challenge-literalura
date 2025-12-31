@@ -15,7 +15,7 @@ import java.util.List;
 @Component
 public class BookMapper {
     private final AuthorRepository authorRepository;
-    private final AuthorMapper authorMapper;  // ← Inyectar AuthorMapper
+    private final AuthorMapper authorMapper;
 
     public BookEntity toEntity(Book dto) {
         if (dto == null) {
@@ -24,25 +24,31 @@ public class BookMapper {
 
         BookEntity entity = new BookEntity();
         entity.setTitle(dto.title());
-        entity.setLanguages(dto.languages());
+
+        if (dto.languages() != null && !dto.languages().isEmpty()) {
+            entity.setLanguage(dto.languages().get(0));
+        } else {
+            entity.setLanguage("unknown");
+        }
+
         entity.setCopyright(dto.copyright());
         entity.setDownloadCount(dto.downloadCount());
 
-        // Mapear autor usando AuthorMapper
         if (dto.authors() != null && !dto.authors().isEmpty()) {
             Author authorDto = dto.authors().get(0);
 
-            // Buscar autor existente por nombre
-            AuthorEntity authorEntity = authorRepository
-                    .findByName(authorDto.name())
-                    .orElseGet(() -> {
-                        // Si no existe, crear uno nuevo usando el mapper
-                        AuthorEntity newAuthor = authorMapper.toEntity(authorDto);
-                        return authorRepository.save(newAuthor);
-                    });
+            if (authorDto != null && authorDto.name() != null && !authorDto.name().trim().isEmpty()) {
+                AuthorEntity authorEntity = authorRepository
+                        .findByName(authorDto.name())
+                        .orElseGet(() -> {
+                            AuthorEntity newAuthor = authorMapper.toEntity(authorDto);
+                            return authorRepository.save(newAuthor);
+                        });
 
-            entity.setAuthor(authorEntity);
+                entity.setAuthor(authorEntity);
+            }
         }
+
         return entity;
     }
 
@@ -51,15 +57,18 @@ public class BookMapper {
             return null;
         }
 
-        // Usar AuthorMapper para convertir el autor
         List<Author> authors = entity.getAuthor() != null
                 ? List.of(authorMapper.toDto(entity.getAuthor()))
+                : Collections.emptyList();
+
+        List<String> languages = entity.getLanguage() != null
+                ? List.of(entity.getLanguage())
                 : Collections.emptyList();
 
         return new Book(
                 entity.getTitle(),
                 authors,
-                entity.getLanguages(),
+                languages,
                 entity.isCopyright(),
                 entity.getDownloadCount()
         );

@@ -14,13 +14,23 @@ public record Book(
         @JsonProperty("download_count") int downloadCount
 ) {
     public String prettyPrint() {
+        String authorInfo = "Unknown Author";
+        if (authors != null && !authors.isEmpty() && authors.get(0) != null) {
+            authorInfo = authors.get(0).prettyPrint();
+        }
+
+        String languageInfo = "unknown";
+        if (languages != null && !languages.isEmpty()) {
+            languageInfo = languages.get(0);
+        }
+
         return """
                Title: %s
                Author: %s
                Languages: %s
                Downloads: %d
                -------------------------
-               """.formatted(title, authors.getFirst().prettyPrint(), languages, downloadCount);
+               """.formatted(title, authorInfo, languageInfo, downloadCount);
     }
 }
 

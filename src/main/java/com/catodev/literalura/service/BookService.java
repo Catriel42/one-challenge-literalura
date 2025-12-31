@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookService {
@@ -56,6 +57,24 @@ public class BookService {
         for(Book dto : dtoResult){
             sb.append(dto.prettyPrint()).append("\n");
         }
+        return sb.toString();
+    }
+
+    @Transactional(readOnly = true)
+    public String getBooksByLanguage(String language) {
+        StringBuilder sb = new StringBuilder();
+        List<BookEntity> result = bookRepository.findByLanguageContaining(language);
+        if (result.isEmpty()) {
+            return "No se encontraron libros en el idioma: " + language;
+        }
+        List<Book> dtoResult = bookMapper.toDtoList(result);
+        sb.append("Libros encontrados en idioma '").append(language).append("': ")
+                .append(result.size()).append("\n\n");
+
+        for (Book dto : dtoResult) {
+            sb.append(dto.prettyPrint()).append("\n");
+        }
+
         return sb.toString();
     }
 }

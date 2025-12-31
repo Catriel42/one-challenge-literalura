@@ -22,5 +22,8 @@ public class BookController {
         return bookService.getBooks();
     }
 
+    public String getBooksByLanguage(String language) {
+        return bookService.getBooksByLanguage(language);
+    }
 
 }
