@@ -24,6 +24,11 @@
 - **Gutendex API**: External API for fetching book data.
 - **Lombok**: Boilerplate code reduction.
 
+## ⚙️ Advanced Configuration
+
+This project leverages **Project Lombok** to minimize boilerplate code, such as getters, setters, constructors, and `toString` methods. This ensures cleaner, more readable, and maintainable code classes, allowing the focus to remain on business logic.
+
+
 ## 🚀 Getting Started
 
 ### Prerequisites
