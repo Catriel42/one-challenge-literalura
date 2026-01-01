@@ -2,7 +2,6 @@ package com.catodev.literalura.view;
 
 import com.catodev.literalura.controller.AuthorController;
 import com.catodev.literalura.controller.BookController;
-import com.catodev.literalura.service.BookService;
 import com.catodev.literalura.util.Languages;
 import org.springframework.stereotype.Component;
 

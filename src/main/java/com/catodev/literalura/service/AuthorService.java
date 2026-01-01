@@ -1,10 +1,8 @@
 package com.catodev.literalura.service;
 
 import com.catodev.literalura.dto.Author;
-import com.catodev.literalura.dto.Book;
 import com.catodev.literalura.mapper.AuthorMapper;
 import com.catodev.literalura.model.AuthorEntity;
-import com.catodev.literalura.model.BookEntity;
 import com.catodev.literalura.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
